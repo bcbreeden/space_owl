@@ -27,8 +27,16 @@ class TestAPI(unittest.TestCase):
         '''
         Test the API call for upcoming launches objects.
         '''
-        response = make_api_call('upcoming/')
+        response = make_api_call('upcoming')
         self.assertEqual(response[0], 200)
+    
+    def test_api_failure(self):
+        '''
+        Test the API call when the endpoint does not exist.
+        '''
+        response = make_api_call('hooplah')
+        self.assertEqual(response[0], 500)
+        self.assertEqual(response[1], None)
     
 
 

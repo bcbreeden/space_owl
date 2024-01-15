@@ -1,4 +1,5 @@
 import requests
+import logging
 
 def make_api_call(endpoint=''):
     '''
@@ -6,7 +7,11 @@ def make_api_call(endpoint=''):
     '''
     api_url = '{}{}'.format(_get_api_stub(), endpoint)
     response = requests.get(api_url)
-    json = response.json()
+    try:
+        json = response.json()
+    except:
+        logging.warning('No JSON payload present: {}'.format(api_url))
+        json = None
     status_code = response.status_code
     return[status_code, json]
 
