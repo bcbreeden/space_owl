@@ -10,9 +10,9 @@ def make_api_call(endpoint=''):
     try:
         json = response.json()
     except Exception as e:
-        logging.warning('No JSON payload present: {} - {}'.format(type(e).__name__, api_url))
+        logging.warning('No JSON payload present: {}'.format(api_url))
         logging.warning('Status Code: {}'.format(response.status_code))
-        logging.warning('Exception returned: {}'.format(e))
+        logging.warning('Exception returned: {} - {}'.format(type(e).__name__, e))
         json = None
     status_code = response.status_code
     return[status_code, json]
