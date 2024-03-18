@@ -1,6 +1,10 @@
 import sqlite3
 
-def create_launch_table(cursor, connection):
+
+def create_launch_table():
+    connection = sqlite3.connect('space_owl.db')
+    connection.row_factory = sqlite3.Row
+    cursor = connection.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Launches (
             launch_id INTEGER PRIMARY KEY,
@@ -30,11 +34,15 @@ def create_launch_table(cursor, connection):
         )
     ''')
     connection.commit()
+    connection.close()
 
-def insert_into_launch_table(cursor, connection, data):
+def insert_into_launch_table(data):
     '''
     This insert statement assumes all data points/features are present.
     '''
+    connection = sqlite3.connect('space_owl.db')
+    connection.row_factory = sqlite3.Row
+    cursor = connection.cursor()
     insert_statement = """
     INSERT OR REPLACE INTO Launches (
         launch_id, url, name, status_id, status_name, status_description, net, 
@@ -47,11 +55,17 @@ def insert_into_launch_table(cursor, connection, data):
     """
     cursor.execute(insert_statement, tuple(data.values()))
     connection.commit()
+    connection.close()
 
-def get_all_launches(cursor, connection):
+def get_all_launches():
     '''
     Selects all data from the Launch table and returns the records.
     '''
+    connection = sqlite3.connect('space_owl.db')
+    connection.row_factory = sqlite3.Row
+    cursor = connection.cursor()
     cursor.execute('SELECT * FROM Launches')
+    records = cursor.fetchall()
     connection.commit()
-    return(cursor.fetchall())
+    connection.close()
+    return(records)
