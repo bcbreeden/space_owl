@@ -78,6 +78,7 @@ cursor.execute('SELECT * FROM Launches')
 records = cursor.fetchall()
 for record in records:
     print(record['pad_location_name'])
+    print(len(records))
     print('----')
 connection.commit()
 connection.close()
