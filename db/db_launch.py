@@ -1,6 +1,6 @@
 import sqlite3
 
-def create_launch_table(cursor):
+def create_launch_table(cursor, connection):
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Launches (
             launch_id INTEGER PRIMARY KEY,
@@ -29,35 +29,13 @@ def create_launch_table(cursor):
             pad_location_country_code TEXT
         )
     ''')
+    connection.commit()
 
-dummy_data = {
-    "launch_id":1,
-    "url": "https://example.com/launch1",
-    "name": "Dummy Launch 123",
-    "status_id": 1,
-    "status_name": "Scheduled",
-    "status_description": "Launch is scheduled",
-    "net": "2024-03-10 12:00:00",
-    "launch_service_provider_id": 1,
-    "launch_service_provider_url": "https://example.com/provider1",
-    "launch_service_provider_name": "SpaceX",
-    "launch_service_provider_type": "Commercial",
-    "rocket_id": 1,
-    "rocket_url": "https://example.com/rocket1",
-    "rocket_name": "Falcon 9",
-    "mission_id": 1,
-    "mission_name": "Dummy Mission 1",
-    "mission_description": "This is a dummy mission",
-    "mission_type": "Satellite Deployment",
-    "mission_orbit_id": 1,
-    "mission_orbit_name": "Low Earth Orbit",
-    "mission_orbit_abbrev": "LEO",
-    "pad_location_id": 1,
-    "pad_location_name": "Kennedy Space Center",
-    "pad_location_country_code": "US"
-}
-
-insert_statement = """
+def insert_into_launch_table(cursor, connection, data):
+    '''
+    This insert statement assumes all data points/features are present.
+    '''
+    insert_statement = """
     INSERT OR REPLACE INTO Launches (
         launch_id, url, name, status_id, status_name, status_description, net, 
         launch_service_provider_id, launch_service_provider_url, launch_service_provider_name, launch_service_provider_type, 
@@ -66,20 +44,14 @@ insert_statement = """
         mission_orbit_id, mission_orbit_name, mission_orbit_abbrev, 
         pad_location_id, pad_location_name, pad_location_country_code
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-"""
+    """
+    cursor.execute(insert_statement, tuple(data.values()))
+    connection.commit()
 
-connection = sqlite3.connect('space_owl.db')
-connection.row_factory = sqlite3.Row #this allows us to access the record details using the column headings from the row
-cursor = connection.cursor()
-create_launch_table(cursor)
-cursor.execute(insert_statement, tuple(dummy_data.values()))
-
-cursor.execute('SELECT * FROM Launches')
-records = cursor.fetchall()
-for record in records:
-    print(record['pad_location_name'])
-    print(len(records))
-    print('----')
-connection.commit()
-connection.close()
-
+def get_all_launches(cursor, connection):
+    '''
+    Selects all data from the Launch table and returns the records.
+    '''
+    cursor.execute('SELECT * FROM Launches')
+    connection.commit()
+    return(cursor.fetchall())
