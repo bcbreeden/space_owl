@@ -4,6 +4,10 @@ import logging
 def make_api_call(endpoint=''):
     '''
     Makes an api call to Launch Library 2. If no endpoint is provided, a call is made to the stub by default.
+
+    It is recommended that an endpoint be provided to get some meaningful data returned.
+
+     Docs: https://lldev.thespacedevs.com/docs/
     '''
     api_url = '{}{}'.format(_get_api_base(), endpoint)
     response = requests.get(api_url)

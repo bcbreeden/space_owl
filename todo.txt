@@ -1,0 +1,55 @@
+* figure out the schema for my launch object to be saved to the database
+[results]
+- [id]
+- [url]
+- [name]
+- [status][id]
+- [status][name]
+- [status][description]
+- [net]
+- [launch_service_provider][id]
+- [launch_service_provider][url]
+- [launch_service_provider][name]
+- [launch_service_provider][type]
+- [rocket][id]
+- [rocket][url]
+- [rocket][name]
+- [mission][id]
+- [mission][name]
+- [mission][description]
+- [mission][type]
+- [mission][orbit][id]
+- [mission][orbit][name]
+- [mission][orbit][abbrev]
+- [pad][location][id]
+- [pad][location][name]
+- [pad][location][country_code]
+
+launch_id
+url
+name
+status_id
+status_name
+status_description
+net
+launch_service_provider_id
+launch_service_provider_url
+launch_service_provider_name
+launch_service_provider_type
+rocket_id
+rocket_url
+rocket_name
+mission_id
+mission_name
+mission_description
+mission_type
+mission_orbit_id
+mission_orbit_name
+mission_orbit_abbrev
+pad_location_id
+pad_location_name
+pad_location_country_code
+
+
+* create said database
+* Write a script to iterate through all launch objects and populate the database
