@@ -1,5 +1,5 @@
 import unittest
-from api import make_api_call, _get_api_base
+from api.api import make_api_call, _get_api_base
 
 class TestAPI(unittest.TestCase):
     def test_dev_api_stub(self):
