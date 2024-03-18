@@ -1,7 +1,7 @@
 import sqlite3
 
 
-def create_launch_table():
+def db_create_launch_table():
     connection = sqlite3.connect('space_owl.db')
     connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
@@ -36,7 +36,7 @@ def create_launch_table():
     connection.commit()
     connection.close()
 
-def insert_into_launch_table(data):
+def db_insert_into_launch_table(data):
     '''
     This insert statement assumes all data points/features are present.
     '''
@@ -57,7 +57,7 @@ def insert_into_launch_table(data):
     connection.commit()
     connection.close()
 
-def get_all_launches():
+def db_get_all_launches():
     '''
     Selects all data from the Launch table and returns the records.
     '''
