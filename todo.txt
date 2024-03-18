@@ -1,4 +1,5 @@
-* figure out the schema for my launch object to be saved to the database
+
+This should be pretty close to the api return structure? Maybe?
 [results]
 - [id]
 - [url]
@@ -25,6 +26,7 @@
 - [pad][location][name]
 - [pad][location][country_code]
 
+These are the column names
 launch_id
 url
 name
@@ -50,6 +52,4 @@ pad_location_id
 pad_location_name
 pad_location_country_code
 
-
-* create said database
 * Write a script to iterate through all launch objects and populate the database

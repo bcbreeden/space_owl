@@ -69,6 +69,7 @@ insert_statement = """
 """
 
 connection = sqlite3.connect('space_owl.db')
+connection.row_factory = sqlite3.Row #this allows us to access the record details using the column headings from the row
 cursor = connection.cursor()
 create_launch_table(cursor)
 cursor.execute(insert_statement, tuple(dummy_data.values()))
@@ -76,7 +77,7 @@ cursor.execute(insert_statement, tuple(dummy_data.values()))
 cursor.execute('SELECT * FROM Launches')
 records = cursor.fetchall()
 for record in records:
-    print(record)
+    print(record['pad_location_name'])
     print('----')
 connection.commit()
 connection.close()
