@@ -7,7 +7,7 @@ def db_create_launch_table():
     cursor = connection.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Launches (
-            launch_id INTEGER PRIMARY KEY,
+            launch_id TEXT PRIMARY KEY,
             url TEXT,
             name TEXT,
             status_id INTEGER,
@@ -36,24 +36,28 @@ def db_create_launch_table():
     connection.commit()
     connection.close()
 
-def db_insert_into_launch_table(data):
+def db_insert_into_launch_table(launch):
     '''
-    This insert statement assumes all data points/features are present.
+    This insert statement assumes a launch object is being passed in.
     '''
+    print(launch.launch_id, flush=True)
+    print('Attempting to insert into the database.', flush=True)
     connection = sqlite3.connect('space_owl.db')
     connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
-    insert_statement = """
-    INSERT OR REPLACE INTO Launches (
-        launch_id, url, name, status_id, status_name, status_description, net, 
-        launch_service_provider_id, launch_service_provider_url, launch_service_provider_name, launch_service_provider_type, 
-        rocket_id, rocket_url, rocket_name, 
-        mission_id, mission_name, mission_description, mission_type, 
-        mission_orbit_id, mission_orbit_name, mission_orbit_abbrev, 
-        pad_location_id, pad_location_name, pad_location_country_code
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """
-    cursor.execute(insert_statement, tuple(data.values()))
+    insert_statement = '''
+    INSERT OR REPLACE INTO launches (launch_id, url, name, status_id, status_name, status_description, net, 
+                            launch_service_provider_id, launch_service_provider_url, launch_service_provider_name, 
+                            launch_service_provider_type, rocket_id, rocket_url, rocket_name, mission_id, 
+                            mission_name, mission_description, mission_type, mission_orbit_id, mission_orbit_name, 
+                            mission_orbit_abbrev, pad_location_id, pad_location_name, pad_location_country_code) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'''
+    cursor.execute(insert_statement, (launch.launch_id, launch.url, launch.name, launch.status_id, launch.status_name, launch.status_description,
+                         launch.net, launch.launch_service_provider_id, launch.launch_service_provider_url, launch.launch_service_provider_name,
+                         launch.launch_service_provider_type, launch.rocket_id, launch.rocket_url, launch.rocket_name, launch.mission_id,
+                         launch.mission_name, launch.mission_description, launch.mission_type, launch.mission_orbit_id, launch.mission_orbit_name,
+                         launch.mission_orbit_abbrev, launch.pad_location_id, launch.pad_location_name, launch.pad_location_country_code))
+    print('Successfully inserted into the database.', flush=True)
     connection.commit()
     connection.close()
 
@@ -69,3 +73,18 @@ def db_get_all_launches():
     connection.commit()
     connection.close()
     return(records)
+
+def db_fetch_launch_by_id(id):
+    print(id, flush=True)
+    print('Attempting to fetch from the database', flush=True)
+    connection = sqlite3.connect('space_owl.db')
+    connection.row_factory = sqlite3.Row
+    cursor = connection.cursor()
+    cursor.execute('''SELECT * FROM launches WHERE launch_id=?''', (id,))
+    record = cursor.fetchone()
+    connection.commit()
+    connection.close()
+    print('Record fetched successfully', flush=True)
+    return(record)
+
+# TODO: delete by id
