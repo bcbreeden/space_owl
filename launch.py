@@ -64,23 +64,29 @@ def get_demo_launch_obj():
         )
     return demo_launch
 
-def build_historic_launch_data():
+def build_historic_launch_data(next_api_tag=""):
     '''
     Self contained function that will call and iterate through the api to add records to the database.
     '''
-    # make api call
-    # get the next api call
-    # iterate through the results
-    # add each result to the database
-    # call next TODO: Left off here
-    # repeat
-    data = make_api_call(endpoint='launch')[1]
-    next = data['next']
+    api_endpoint = 'launch' + next_api_tag
+    data = make_api_call(endpoint=api_endpoint)[1]
     launch_results = data['results']
     for result in launch_results:
-        obj = _cast_api_result_to_object(result)
+        try:
+            obj = _cast_api_result_to_object(result)
+        except Exception as e:
+            print('Exception while trying to cast into a launch object.', flush=True)
+            print(e, flush=True)
+            continue
         db_insert_into_launch_table(obj)
-        
+    try:
+        data_next = data['next']
+    except:
+        print('Next page not found. Ending historic data function.', flush=True)
+        return
+    index = data_next.find("/launch")
+    next_page = data_next[index + len("/launch"):]
+    build_historic_launch_data(next_api_tag=next_page)
 
     
 def _cast_db_record_to_object(record):

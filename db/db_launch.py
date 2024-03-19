@@ -1,6 +1,5 @@
 import sqlite3
 
-
 def db_create_launch_table():
     connection = sqlite3.connect('space_owl.db')
     connection.row_factory = sqlite3.Row
