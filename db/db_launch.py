@@ -1,6 +1,13 @@
 import sqlite3
 
+'''
+This file serves as the primary entry point to the database. All functions should be self contained. That is, they should create independent connections and close them.
+'''
+
 def db_create_launch_table():
+    '''
+    Builds the launch table if it does not already exist.
+    '''
     connection = sqlite3.connect('space_owl.db')
     connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
@@ -74,6 +81,9 @@ def db_get_all_launches():
     return(records)
 
 def db_fetch_launch_by_id(id):
+    '''
+    Fetches a single launch record via the launch_id.
+    '''
     print(id, flush=True)
     print('Attempting to fetch from the database', flush=True)
     connection = sqlite3.connect('space_owl.db')
@@ -83,15 +93,27 @@ def db_fetch_launch_by_id(id):
     record = cursor.fetchone()
     connection.commit()
     connection.close()
-    print('Record fetched successfully', flush=True)
-    return(record)
+    if record == None:
+        print("Record not found:", id, flush=True)
+    else:
+        print('Record fetched successfully', flush=True)
+        return(record)
 
 def db_delete_launch_by_id(id):
+    '''
+    Deletes a single launch record via the launch_id.
+    '''
     print(id, flush=True)
     print('Attempting to delete from the database', flush=True)
     connection = sqlite3.connect('space_owl.db')
+    connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
-    cursor.execute('''DELETE FROM launches WHERE launch_id=?''', (id,))
+    cursor.execute('''SELECT * FROM launches WHERE launch_id=?''', (id,))
+    record = cursor.fetchone()
+    if record == None:
+        print("Record not found:", id, flush=True)
+    else:
+        cursor.execute('''DELETE FROM launches WHERE launch_id=?''', (id,))
+        print('Record deleted successfully', flush=True)
     connection.commit()
     connection.close()
-    print('Record deleted successfully', flush=True)

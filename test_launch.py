@@ -4,10 +4,16 @@ from db.db_launch import db_insert_into_launch_table, db_fetch_launch_by_id, db_
 
 class TestLaunch(unittest.TestCase):
     def test_get_all_launch_objs_count(self):
+        '''
+        Verifies the the get_all_launch_objects returns a list greater than 0.
+        '''
         launch_objs = get_all_launch_objects()
         self.assertGreater(len(launch_objs), 0)
 
     def test_launch_record_insert(self):
+        '''
+        Verifies that a launch record can be successfully created in the database and then fetched from said database.
+        '''
         demo_launch = get_demo_launch_obj()
         db_insert_into_launch_table(demo_launch)
         test_record = db_fetch_launch_by_id(demo_launch.launch_id)

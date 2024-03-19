@@ -2,6 +2,9 @@ from db.db_launch import db_get_all_launches, db_insert_into_launch_table
 from api.api import make_api_call
 
 class Launch:
+    '''
+    Launch objects contain all of the data for a specific launch mission. This class, and the subsequent functions, will act as the controller.
+    '''
     def __init__(self, launch_id, url, name, status_id, status_name, status_description, net, launch_service_provider_id, launch_service_provider_url, launch_service_provider_name, launch_service_provider_type, rocket_id, rocket_url, rocket_name, mission_id, mission_name, mission_description, mission_type, mission_orbit_id, mission_orbit_name, mission_orbit_abbrev, pad_location_id, pad_location_name, pad_location_country_code):
         self.launch_id = launch_id
         self.url = url
@@ -29,6 +32,11 @@ class Launch:
         self.pad_location_country_code = pad_location_country_code
 
 def get_all_launch_objects():
+    '''
+    Queries the database for all launch entries and converts them into Launch objects.
+
+    Returns: List of Launch objects.
+    '''
     records = db_get_all_launches()
     all_launch_objects = []
     for record in records:
@@ -36,6 +44,9 @@ def get_all_launch_objects():
     return all_launch_objects
 
 def get_demo_launch_obj():
+    '''
+    Returns: A demo Launch object used for testing.
+    '''
     demo_launch = Launch (
         launch_id="abc112",
         url="https://example.com/launch1",
@@ -66,7 +77,9 @@ def get_demo_launch_obj():
 
 def build_historic_launch_data(next_api_tag=""):
     '''
-    Self contained function that will call and iterate through the api to add records to the database.
+    Self contained function that will call and iterate through the api to add all records to the database. The api returns 10 results at a time.
+
+    Args: next_api_tag -> The api has a field that points to the next page of results.
     '''
     api_endpoint = 'launch' + next_api_tag
     data = make_api_call(endpoint=api_endpoint)[1]
@@ -90,6 +103,9 @@ def build_historic_launch_data(next_api_tag=""):
 
     
 def _cast_db_record_to_object(record):
+    '''
+    Takes in a record from the db and casts the data into a Launch object.
+    '''
     launch_obj = Launch(
         launch_id=record['launch_id'],
         url=record['url'],
@@ -119,6 +135,9 @@ def _cast_db_record_to_object(record):
     return launch_obj
 
 def _cast_api_result_to_object(api_result):
+    '''
+    Takes in a result entry from the api and casts the data into a Launch object.
+    '''
     launch_obj = Launch(
         launch_id=api_result['id'],
         url=api_result['url'],
