@@ -72,7 +72,7 @@ def build_historic_launch_data():
     # get the next api call
     # iterate through the results
     # add each result to the database
-    # call next
+    # call next TODO: Left off here
     # repeat
     data = make_api_call(endpoint='launch')[1]
     next = data['next']

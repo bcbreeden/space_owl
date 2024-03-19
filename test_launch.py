@@ -1,6 +1,6 @@
 import unittest
 from launch import get_all_launch_objects, get_demo_launch_obj
-from db.db_launch import db_insert_into_launch_table, db_fetch_launch_by_id
+from db.db_launch import db_insert_into_launch_table, db_fetch_launch_by_id, db_delete_launch_by_id
 
 class TestLaunch(unittest.TestCase):
     def test_get_all_launch_objs_count(self):
@@ -36,8 +36,7 @@ class TestLaunch(unittest.TestCase):
         self.assertEqual(test_record['pad_location_id'], demo_launch.pad_location_id)
         self.assertEqual(test_record['pad_location_name'], demo_launch.pad_location_name)
         self.assertEqual(test_record['pad_location_country_code'], demo_launch.pad_location_country_code)
-
-
+        db_delete_launch_by_id(demo_launch.launch_id)
 
 if __name__ == '__main__':
     unittest.main()

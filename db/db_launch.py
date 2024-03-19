@@ -87,4 +87,12 @@ def db_fetch_launch_by_id(id):
     print('Record fetched successfully', flush=True)
     return(record)
 
-# TODO: delete by id
+def db_delete_launch_by_id(id):
+    print(id, flush=True)
+    print('Attempting to delete from the database', flush=True)
+    connection = sqlite3.connect('space_owl.db')
+    cursor = connection.cursor()
+    cursor.execute('''DELETE FROM launches WHERE launch_id=?''', (id,))
+    connection.commit()
+    connection.close()
+    print('Record deleted successfully', flush=True)
