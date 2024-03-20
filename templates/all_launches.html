@@ -15,14 +15,16 @@
             </tr>
         </thead>
         <tbody>
+            {% for launch in launches %}
             <tr>
-                <td>Sample Launch</td>
-                <td>Successful</td>
-                <td>2024-03-19</td>
-                <td>SpaceX</td>
-                <td>Sample Mission</td>
-                <td>Sample Location</td>
+                <td>{{ launch.name }}</td>
+                <td>{{ launch.status_name }}</td>
+                <td>{{ launch.net }}</td>
+                <td>{{ launch.launch_service_provider_name }}</td>
+                <td>{{ launch.mission_name }}</td>
+                <td>{{ launch.pad_location_country_code }}</td>
             </tr>
+            {% endfor %}
         </tbody>
     </table>
 

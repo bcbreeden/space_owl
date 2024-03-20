@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-
+from launch import get_all_launch_objects
 app = Flask(__name__)
 app.config["DEBUG"] = True
 
@@ -12,7 +12,9 @@ def index():
 
 @app.route('/all_launches')
 def all_launches():
-    return render_template('all_launches.html')
+    launches = get_all_launch_objects()
+    return render_template('all_launches.html',
+                           launches = launches)
 
 if __name__ == '__main__':
     app.run(debug=True)
