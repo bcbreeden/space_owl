@@ -1,0 +1,32 @@
+:root {
+    --dark: #171721;
+    --purple: #872B97;
+    --orange: #FF7130;
+    --salmon: #ff3c68;
+    --gray: #f9f9f9;
+  }
+
+a, a:visited {
+    color: var(--orange);
+}
+
+a:hover {
+    color: var(--purple)
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: var(--dark);
+    }
+
+p, td {
+    color: var(--gray);
+    margin: 0;
+    }
+
+th {
+    color: var(--orange);
+}

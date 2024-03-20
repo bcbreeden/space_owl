@@ -13,6 +13,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Orbit Watch</a></li>
+                <li><a href="{{ url_for('all_launches') }}">Launch History</a></li>
+            </ul>
+        </nav>
+    </header>
 
     <main>
         {% block content %} {% endblock %}
