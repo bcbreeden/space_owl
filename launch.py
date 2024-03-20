@@ -48,6 +48,7 @@ def get_launches_after_now():
     '''
     Requests data from the database for launches that are scheduled after the current time.
     '''
+    print('Attempting to get all launches after the current time.', flush=True)
     records = db_get_launches_after_now()
     launch_objects = []
     for record in records:
@@ -58,6 +59,7 @@ def get_demo_launch_obj():
     '''
     Returns: A demo Launch object used for testing.
     '''
+    print('Configuring and returning a demo launch object.', flush=True)
     demo_launch = Launch (
         launch_id="abc112",
         url="https://example.com/launch1",
@@ -154,6 +156,8 @@ def _cast_api_result_to_object(api_result):
     '''
     Takes in a result entry from the api and casts the data into a Launch object.
     '''
+    print('Converting api result to launch object.', flush=True)
+    print(api_result['id'])
     launch_obj = Launch(
         launch_id=api_result['id'],
         url=api_result['url'],
@@ -181,11 +185,3 @@ def _cast_api_result_to_object(api_result):
         pad_location_country_code=api_result['pad']['location']['country_code']
     )
     return launch_obj
-
-# launches = get_all_launch_objects()
-# for launch in launches:
-#     print(launch.net)
-#     print(launch.mission_name)
-#     print(launch.mission_description)
-#     print('00000000000000000000000')
-# print(len(launches))
