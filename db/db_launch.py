@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import timezone
 
 '''
 This file serves as the primary entry point to the database. All functions should be self contained. That is, they should create independent connections and close them.
@@ -51,6 +52,8 @@ def db_insert_into_launch_table(launch):
     connection = sqlite3.connect('space_owl.db')
     connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
+    net = launch.net
+    net_utc = net.astimezone(timezone.utc)
     insert_statement = '''
     INSERT OR REPLACE INTO launches (launch_id, url, name, status_id, status_name, status_description, net, 
                             launch_service_provider_id, launch_service_provider_url, launch_service_provider_name, 
@@ -59,7 +62,7 @@ def db_insert_into_launch_table(launch):
                             mission_orbit_abbrev, pad_location_id, pad_location_name, pad_location_country_code) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'''
     cursor.execute(insert_statement, (launch.launch_id, launch.url, launch.name, launch.status_id, launch.status_name, launch.status_description,
-                         launch.net, launch.launch_service_provider_id, launch.launch_service_provider_url, launch.launch_service_provider_name,
+                         net_utc, launch.launch_service_provider_id, launch.launch_service_provider_url, launch.launch_service_provider_name,
                          launch.launch_service_provider_type, launch.rocket_id, launch.rocket_url, launch.rocket_name, launch.mission_id,
                          launch.mission_name, launch.mission_description, launch.mission_type, launch.mission_orbit_id, launch.mission_orbit_name,
                          launch.mission_orbit_abbrev, launch.pad_location_id, launch.pad_location_name, launch.pad_location_country_code))
@@ -74,15 +77,32 @@ def db_get_all_launches():
     connection = sqlite3.connect('space_owl.db')
     connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
-    cursor.execute('SELECT * FROM Launches')
+    cursor.execute('''SELECT * FROM Launches''')
     records = cursor.fetchall()
     connection.commit()
     connection.close()
     return(records)
 
-def db_fetch_launch_by_id(id):
+def db_get_launches_after_now():
     '''
-    Fetches a single launch record via the launch_id.
+    Selects all launches that have a NET after the current time.
+    '''
+    connection = sqlite3.connect('space_owl.db')
+    connection.row_factory = sqlite3.Row
+    cursor = connection.cursor()
+    cursor.execute('''
+                   SELECT *
+                    FROM Launches
+                    WHERE net > datetime('now', 'utc');
+                   ''')
+    records = cursor.fetchall()
+    connection.commit()
+    connection.close()
+    return(records)
+
+def db_get_launch_by_id(id):
+    '''
+    Selects a single launch record via the launch_id.
     '''
     print(id, flush=True)
     print('Attempting to fetch from the database', flush=True)

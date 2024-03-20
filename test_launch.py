@@ -1,6 +1,7 @@
 import unittest
-from launch import get_all_launch_objects, get_demo_launch_obj
-from db.db_launch import db_insert_into_launch_table, db_fetch_launch_by_id, db_delete_launch_by_id
+from datetime import datetime, timezone
+from launch import get_all_launch_objects, get_demo_launch_obj, get_launches_after_now
+from db.db_launch import db_insert_into_launch_table, db_get_launch_by_id, db_delete_launch_by_id
 
 class TestLaunch(unittest.TestCase):
     def test_get_all_launch_objs_count(self):
@@ -16,7 +17,7 @@ class TestLaunch(unittest.TestCase):
         '''
         demo_launch = get_demo_launch_obj()
         db_insert_into_launch_table(demo_launch)
-        test_record = db_fetch_launch_by_id(demo_launch.launch_id)
+        test_record = db_get_launch_by_id(demo_launch.launch_id)
         self.assertIsNotNone(test_record)
         self.assertEqual(test_record['launch_id'], demo_launch.launch_id)
         self.assertEqual(test_record['url'], demo_launch.url)
@@ -24,7 +25,7 @@ class TestLaunch(unittest.TestCase):
         self.assertEqual(test_record['status_id'], demo_launch.status_id)
         self.assertEqual(test_record['status_name'], demo_launch.status_name)
         self.assertEqual(test_record['status_description'], demo_launch.status_description)
-        self.assertEqual(test_record['net'], demo_launch.net)
+        self.assertEqual(datetime.fromisoformat(test_record['net'].replace('Z', '+00:00')), demo_launch.net)
         self.assertEqual(test_record['launch_service_provider_id'], demo_launch.launch_service_provider_id)
         self.assertEqual(test_record['launch_service_provider_url'], demo_launch.launch_service_provider_url)
         self.assertEqual(test_record['launch_service_provider_name'], demo_launch.launch_service_provider_name)
@@ -43,6 +44,15 @@ class TestLaunch(unittest.TestCase):
         self.assertEqual(test_record['pad_location_name'], demo_launch.pad_location_name)
         self.assertEqual(test_record['pad_location_country_code'], demo_launch.pad_location_country_code)
         db_delete_launch_by_id(demo_launch.launch_id)
+    
+    def test_launches_after_now(self):
+        '''
+        Verifies that the launch objects fetched take place after the current time.
+        '''
+        launch_objs = get_launches_after_now()
+        date_time = launch_objs[0].net
+        now = datetime.now(timezone.utc)
+        self.assertTrue(date_time > now)
 
 if __name__ == '__main__':
     unittest.main()

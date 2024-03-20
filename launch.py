@@ -1,5 +1,6 @@
-from db.db_launch import db_get_all_launches, db_insert_into_launch_table
+from db.db_launch import db_get_all_launches, db_insert_into_launch_table, db_get_launches_after_now
 from api.api import make_api_call
+from datetime import datetime
 
 class Launch:
     '''
@@ -12,7 +13,7 @@ class Launch:
         self.status_id = status_id
         self.status_name = status_name
         self.status_description = status_description
-        self.net = net
+        self.net = datetime.fromisoformat(net.replace('Z', '+00:00'))
         self.launch_service_provider_id = launch_service_provider_id
         self.launch_service_provider_url = launch_service_provider_url
         self.launch_service_provider_name = launch_service_provider_name
@@ -43,6 +44,16 @@ def get_all_launch_objects():
         all_launch_objects.append(_cast_db_record_to_object(record))
     return all_launch_objects
 
+def get_launches_after_now():
+    '''
+    Requests data from the database for launches that are scheduled after the current time.
+    '''
+    records = db_get_launches_after_now()
+    launch_objects = []
+    for record in records:
+        launch_objects.append(_cast_db_record_to_object(record))
+    return launch_objects
+
 def get_demo_launch_obj():
     '''
     Returns: A demo Launch object used for testing.
@@ -54,7 +65,7 @@ def get_demo_launch_obj():
         status_id=1,
         status_name="Scheduled",
         status_description="Launch is scheduled",
-        net="2024-03-10 12:00:00",
+        net="2100-12-31T00:00:00Z",
         launch_service_provider_id=1,
         launch_service_provider_url="https://example.com/provider1",
         launch_service_provider_name="SpaceX",
@@ -83,7 +94,12 @@ def build_historic_launch_data(next_api_tag=""):
     '''
     api_endpoint = 'launch' + next_api_tag
     data = make_api_call(endpoint=api_endpoint)[1]
-    launch_results = data['results']
+    try:
+        launch_results = data['results']
+    except:
+        print('Error finding results.', flush=True)
+        print('Endpoint:', api_endpoint)
+        return
     for result in launch_results:
         try:
             obj = _cast_api_result_to_object(result)
@@ -92,12 +108,12 @@ def build_historic_launch_data(next_api_tag=""):
             print(e, flush=True)
             continue
         db_insert_into_launch_table(obj)
+    data_next = data['next']
     try:
-        data_next = data['next']
-    except:
+        index = data_next.find("/launch")
+    except AttributeError:
         print('Next page not found. Ending historic data function.', flush=True)
         return
-    index = data_next.find("/launch")
     next_page = data_next[index + len("/launch"):]
     build_historic_launch_data(next_api_tag=next_page)
 
@@ -165,3 +181,11 @@ def _cast_api_result_to_object(api_result):
         pad_location_country_code=api_result['pad']['location']['country_code']
     )
     return launch_obj
+
+# launches = get_all_launch_objects()
+# for launch in launches:
+#     print(launch.net)
+#     print(launch.mission_name)
+#     print(launch.mission_description)
+#     print('00000000000000000000000')
+# print(len(launches))
