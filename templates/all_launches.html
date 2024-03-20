@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>All Launches</h1>
+
+    <table id="all_launches" class="display">
+        <thead>
+            <tr>
+                <th>Launch</th>
+                <th>Status</th>
+                <th>NET</th>
+                <th>LSP</th>
+                <th>Mission Name</th>
+                <th>Launch Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Sample Launch</td>
+                <td>Successful</td>
+                <td>2024-03-19</td>
+                <td>SpaceX</td>
+                <td>Sample Mission</td>
+                <td>Sample Location</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/2.0.2/js/dataTables.min.js"></script>
+    <script>
+        $(document).ready( function () {
+            $('#all_launches').DataTable();
+        } );
+    </script>
+{% endblock %}
