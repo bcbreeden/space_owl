@@ -6,6 +6,17 @@
     --gray: #f9f9f9;
   }
 
+p, a, td, th, select, option {
+    font-family: "Jura", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: light;
+    font-style: normal;
+}
+
+label {
+    color: var(--gray);
+}
+
 a, a:visited {
     color: var(--orange);
 }
@@ -27,6 +38,6 @@ p, td {
     margin: 0;
     }
 
-th {
-    color: var(--orange);
+th, select, option {
+    color: var(--orange) !important;
 }
