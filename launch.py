@@ -44,9 +44,9 @@ def get_all_launch_objects():
         all_launch_objects.append(_cast_db_record_to_object(record))
     return all_launch_objects
 
-def get_launches_after_now():
+def get_5_launches_after_now():
     '''
-    Requests data from the database for launches that are scheduled after the current time.
+    Requests data from the database for a number of launches that are scheduled after the current time.
     '''
     print('Attempting to get all launches after the current time.', flush=True)
     records = db_get_launches_after_now()

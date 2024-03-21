@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime, timezone
-from launch import get_all_launch_objects, get_demo_launch_obj, get_launches_after_now
+from launch import get_all_launch_objects, get_demo_launch_obj, get_5_launches_after_now
 from db.db_launch import db_insert_into_launch_table, db_get_launch_by_id, db_delete_launch_by_id
 
 class TestLaunch(unittest.TestCase):
@@ -49,7 +49,7 @@ class TestLaunch(unittest.TestCase):
         '''
         Verifies that the launch objects fetched take place after the current time.
         '''
-        launch_objs = get_launches_after_now()
+        launch_objs = get_5_launches_after_now()
         date_time = launch_objs[0].net
         now = datetime.now(timezone.utc)
         self.assertTrue(date_time > now)
