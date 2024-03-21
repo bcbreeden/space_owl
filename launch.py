@@ -124,6 +124,8 @@ def _cast_db_record_to_object(record):
     '''
     Takes in a record from the db and casts the data into a Launch object.
     '''
+    print('Converting database record to launch object.', flush=True)
+    print(record['launch_id'])
     launch_obj = Launch(
         launch_id=record['launch_id'],
         url=record['url'],
