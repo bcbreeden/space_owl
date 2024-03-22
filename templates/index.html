@@ -1,9 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <!-- Countdown -->
+    <script src="{{ url_for('static', filename='js/countdown.js') }}"></script>
+    <script>
+        var launchDate = "{{ launches[0].net }}";
+        var targetDate = new Date(launchDate).getTime();
+    </script>
+
+
     <h2>Next Launch: {{launches[0].mission_name}}</h2>
+    <h3>T - <div id="countdown">-- : -- : -- : --</div></h3>
     <h3>{{launches[0].net}}</h3>
     <h3>{{launches[0].rocket_name}}</h3>
     <h3>{{launches[0].type}}</h3>
     <h3>{{launches[0].mission_description}}</h3>
 {% endblock %}
+
+
+
