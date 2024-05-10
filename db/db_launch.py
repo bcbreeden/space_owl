@@ -96,6 +96,7 @@ def db_get_launches_after_now(limit=5):
                    SELECT *
                     FROM Launches
                     WHERE net > datetime('now', 'utc')
+                    ORDER BY ABS(strftime('%s', net) - strftime('%s', 'now', 'utc')) ASC
                     LIMIT ?;
                    ''', (limit,))
     records = cursor.fetchall()

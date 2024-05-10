@@ -11,10 +11,23 @@
 
     <h2>Next Launch: {{launches[0].mission_name}}</h2>
     <h3>T - <div id="countdown">-- : -- : -- : --</div></h3>
+    <h3>{{launches[0].launch_service_provider_name}}</h3>
     <h3>{{launches[0].net}}</h3>
     <h3>{{launches[0].rocket_name}}</h3>
     <h3>{{launches[0].type}}</h3>
     <h3>{{launches[0].mission_description}}</h3>
+    <hr>
+
+    {% for launch in launches[-4:] %}
+        <h2>{{ launch.mission_name }}</h2>
+        <h3>{{launch.launch_service_provider_name}}</h3>
+        <h3>{{ launch.net }}</h3>
+        <h3>{{ launch.rocket_name }}</h3>
+        <h3>{{launch.type}}</h3>
+        <h3>{{launch.mission_description}}</h3>
+    {% endfor %}
+
+
 {% endblock %}
 
 

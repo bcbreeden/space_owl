@@ -187,3 +187,5 @@ def _cast_api_result_to_object(api_result):
         pad_location_country_code=api_result['pad']['location']['country_code']
     )
     return launch_obj
+
+print(get_launches_after_now())
