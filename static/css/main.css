@@ -6,6 +6,10 @@
     --gray: #f9f9f9;
   }
 
+button {
+    color: var(--orange) !important;
+}
+
 p, a, td, th, select, option, label {
     font-family: "Jura", sans-serif;
     font-optical-sizing: auto;
