@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime, timezone
-from launch import get_all_launch_objects, get_demo_launch_obj, get_5_launches_after_now
+from launch import get_all_launch_objects, get_demo_launch_obj, get_launches_after_now
 from db.db_launch import db_insert_into_launch_table, db_get_launch_by_id, db_delete_launch_by_id
 
 class TestLaunch(unittest.TestCase):
@@ -45,14 +45,25 @@ class TestLaunch(unittest.TestCase):
         self.assertEqual(test_record['pad_location_country_code'], demo_launch.pad_location_country_code)
         db_delete_launch_by_id(demo_launch.launch_id)
     
-    def test_launches_after_now(self):
+    def test_3_launches_after_now(self):
         '''
-        Verifies that the launch objects fetched take place after the current time.
+        Verifies that three launch objects are fetched when an argument is provided. Additionally, verifies the objects datetime is after the current datetime.
         '''
-        launch_objs = get_5_launches_after_now()
+        launch_objs = get_launches_after_now(3)
         date_time = launch_objs[0].net
         now = datetime.now(timezone.utc)
         self.assertTrue(date_time > now)
+        self.assertEqual(len(launch_objs), 3)
+    
+    def test_default_launches_after_now(self):
+        '''
+        Verifies that five launch objects are fetched when no argument is provided. Additionally, verifies the objects datetime is after the current datetime.
+        '''
+        launch_objs = get_launches_after_now()
+        date_time = launch_objs[0].net
+        now = datetime.now(timezone.utc)
+        self.assertTrue(date_time > now)
+        self.assertEqual(len(launch_objs), 5)
 
 if __name__ == '__main__':
     unittest.main()

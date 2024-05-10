@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from launch import get_all_launch_objects, get_5_launches_after_now
+from launch import get_all_launch_objects, get_launches_after_now
 app = Flask(__name__)
 app.config["DEBUG"] = True
 
@@ -8,7 +8,7 @@ Renders the index template.
 '''
 @app.route('/')
 def index():
-    launches_after_now = get_5_launches_after_now()
+    launches_after_now = get_launches_after_now()
     return render_template('index.html',
                            launches = launches_after_now)
 

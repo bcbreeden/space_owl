@@ -83,9 +83,11 @@ def db_get_all_launches():
     connection.close()
     return(records)
 
-def db_get_launches_after_now():
+def db_get_launches_after_now(limit=5):
     '''
-    Selects next 5 launches that have a NET after the current time.
+    Selects a number of launches that take place after the current date/time.
+
+    Defaults to 5 if none are provided.
     '''
     connection = sqlite3.connect('space_owl.db')
     connection.row_factory = sqlite3.Row
@@ -94,8 +96,8 @@ def db_get_launches_after_now():
                    SELECT *
                     FROM Launches
                     WHERE net > datetime('now', 'utc')
-                    LIMIT 5;
-                   ''')
+                    LIMIT ?;
+                   ''', (limit,))
     records = cursor.fetchall()
     connection.commit()
     connection.close()
